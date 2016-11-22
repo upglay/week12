@@ -111,20 +111,12 @@ public:
 
 	void move(const int& i, const int& j)
 	{
-		i_ = i;
-		j_ = j;
-	}
-
-	void updateReward(const double& reward)
-	{
-		reward_ = reward;
+		i_ = i;		j_ = j;
 	}
 
 	void reset()
 	{
-		i_ = 0;
-		j_ = 0;
-		reward_ = 0.0;
+		i_ = 0;		j_ = 0;		reward_ = 0.0;
 	}
 };
 
@@ -184,7 +176,7 @@ int main()
 			my_agent.move(i, j);
 			
 			// update reward
-			my_agent.updateReward(my_agent.reward_ + world.getCell(i, j).reward_ + world.getCell(i, j).getMaxQ());
+			my_agent.reward_ = world.getCell(i, j).reward_;
 
 			// update q values of old cell
 			world.getCell(i_old, j_old).q_[action] = world.getCell(i, j).reward_ + world.getCell(i, j).getMaxQ();
@@ -277,10 +269,10 @@ int main()
 			my_agent.move(i, j);
 
 			// update reward
-			my_agent.updateReward(world.getCell(i_old, j_old).q_[action] + 0.5*(world.getCell(i, j).reward_ + 0.9 * world.getCell(i, j).getMaxQ() - world.getCell(i_old, j_old).q_[action]));
-			
+			my_agent.reward_ = world.getCell(i, j).reward_;
+
 			// update q values of old cell
-			world.getCell(i_old, j_old).q_[action] = world.getCell(i_old, j_old).q_[action] + 0.5*(world.getCell(i, j).reward_ + 0.9*world.getCell(i, j).getMaxQ() - world.getCell(i_old, j_old).q_[action]);
+			world.getCell(i_old, j_old).q_[action] += 0.5 * (world.getCell(i, j).reward_ + 0.9 * world.getCell(i, j).getMaxQ() - world.getCell(i_old, j_old).q_[action]);
 
 			// reset if agent is in final cells
 			if (world.getCell(i, j).isFinal == true)
