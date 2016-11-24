@@ -120,7 +120,7 @@ public:
 	}
 };
 
-/*
+
 //step 1
 int main()
 {
@@ -176,7 +176,7 @@ int main()
 			my_agent.move(i, j);
 			
 			// update reward
-			my_agent.reward_ = world.getCell(i, j).reward_;
+			world.getCell(i_old, j_old).reward_ -= 0.05;
 
 			// update q values of old cell
 			world.getCell(i_old, j_old).q_[action] = world.getCell(i, j).reward_ + world.getCell(i, j).getMaxQ();
@@ -185,6 +185,12 @@ int main()
 			if (world.getCell(i, j).isFinal == true)
 			{
 				my_agent.reset();
+				for (int j = 0; j < world_res_j; j++)
+				for (int i = 0; i < world_res_i; i++)
+				{
+					if(world.getCell(i, j).isFinal != true)
+						world.getCell(i, j).reward_ = -0.1;
+				}
 			}
 		}
 		else
@@ -202,8 +208,9 @@ int main()
 
 	return 0;
 }
-*/
 
+
+/*
 //step 2
 int main()
 {
@@ -269,7 +276,7 @@ int main()
 			my_agent.move(i, j);
 
 			// update reward
-			my_agent.reward_ = world.getCell(i, j).reward_;
+			world.getCell(i_old, j_old).reward_ -= 0.01;
 
 			// update q values of old cell
 			world.getCell(i_old, j_old).q_[action] += 0.5 * (world.getCell(i, j).reward_ + 0.9 * world.getCell(i, j).getMaxQ() - world.getCell(i_old, j_old).q_[action]);
@@ -278,6 +285,12 @@ int main()
 			if (world.getCell(i, j).isFinal == true)
 			{
 				my_agent.reset();
+				for (int j = 0; j < world_res_j; j++)
+				for (int i = 0; i < world_res_i; i++)
+				{
+					if(world.getCell(i, j).isFinal != true)
+						world.getCell(i, j).reward_ = -0.1;
+				}
 			}
 		}
 		else
@@ -295,3 +308,4 @@ int main()
 
 	return 0;
 }
+*/

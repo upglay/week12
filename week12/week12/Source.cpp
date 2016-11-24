@@ -8,7 +8,7 @@
 class CellData
 {
 public:
-	double q_[4] = { 0.0, 0.0, 0.0, 0.0 };
+	double q_[4] = { 0.0, 0.0, 0.0, 0.0 }; //up, down, left, right
 	double reward_ = 0.0;
 
 	CellData()
@@ -58,9 +58,7 @@ public:
 		else
 			printf(" 0.0");
 	}
-
 	
-
 	void print()
 	{
 		for (int j = j_res_ - 1; j >= 0; j--)
@@ -70,6 +68,15 @@ public:
 				CellData &cell = getCell(i, j);
 
 				printf("   "); printSigned(cell.q_[0]); printf("   ");
+				printf("   ");
+			}
+
+			printf("\n");
+
+			for (int i = 0; i < i_res_; i++)
+			{
+				CellData &cell = getCell(i, j);
+				printSigned(cell.q_[2]); printf("  "); printSigned(cell.q_[3]);
 				printf("   ");
 			}
 
@@ -88,9 +95,18 @@ public:
 	}
 };
 
-std::ostream& operator<<(std::ostream& os, const GridWorld& g)
+std::ostream& operator<<(std::ostream& os, GridWorld& g)
 {
+	for (int j = g.j_res_ - 1; j >= 0; j--)
+	{
+		for (int i = 0; i < g.i_res_; i++)
+		{
+			CellData &cell = g.getCell(i, j);
 
+		}
+	}
+
+	return os;
 }
 
 class Agent
@@ -111,8 +127,61 @@ int main()
 	
 	GridWorld world(world_res_i, world_res_j);
 
+	//for (int j = 0; j < world_res_j; j++)
+	//for (int i = 0; i < world_res_i; i++)
+	//{
+	//	world.getCell(i, j).reward_ = -0.1;
+	//}
+
+	world.getCell(2, 1).reward_ = 1.0;
+	world.getCell(2, 0).reward_ = -1.0;
+
+	Agent my_agent;
+
 	world.print();
 
+	//trained
+	for (int t = 0; t < 10000; t++)
+	{
+		const int action = rand() % 4;
+
+		int i = my_agent.i_, j = my_agent.j_;
+		int i_old = i, j_old = j;
+
+		switch (action)
+		{
+		case 0:
+			j++;
+			break;
+		case 1:
+			j--;
+			break;
+		case 2:
+			i--;
+			break;
+		case 3:
+			i++;
+			break;
+		}
+
+		if (world.isInside(i, j) == true)
+		{
+			//move agent
+			
+			//update reward (r_t)
+
+			//update q values of previous cell (q_t)
+
+			//reset if agent is in final cells
+		}
+		else
+		{
+
+		}
+	}
+
+
+	world.print();
 
 	return 0;
 }
