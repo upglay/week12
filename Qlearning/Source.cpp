@@ -23,6 +23,12 @@ public:
 	{
 		return MAX4(q_[0], q_[1], q_[2], q_[3]);
 	}
+
+	void setFinal(const double& point)
+	{
+		isFinal = true;
+		reward_ = point;
+	}
 };
 
 class GridWorld
@@ -114,13 +120,20 @@ public:
 		i_ = i;		j_ = j;
 	}
 
-	void reset()
+	void reset(GridWorld& w)
 	{
 		i_ = 0;		j_ = 0;		reward_ = 0.0;
+
+		for (int j = 0; j < w.j_res_; j++)
+		for (int i = 0; i < w.i_res_; i++)
+		{
+			if (w.getCell(i, j).isFinal != true)
+				w.getCell(i, j).reward_ = -0.1;
+		}
 	}
 };
 
-
+/*
 //step 1
 int main()
 {
@@ -136,10 +149,8 @@ int main()
 		world.getCell(i, j).reward_ = -0.1;
 	}
 
-	world.getCell(2, 1).reward_ = 1.0;
-	world.getCell(2, 0).reward_ = -1.0;
-	world.getCell(2, 1).isFinal = true;
-	world.getCell(2, 0).isFinal = true;
+	world.getCell(2, 1).setFinal(1.0);
+	world.getCell(2, 0).setFinal(-1.0);
 
 	Agent my_agent;
 
@@ -184,13 +195,7 @@ int main()
 			// reset if agent is in final cells
 			if (world.getCell(i, j).isFinal == true)
 			{
-				my_agent.reset();
-				for (int j = 0; j < world_res_j; j++)
-				for (int i = 0; i < world_res_i; i++)
-				{
-					if(world.getCell(i, j).isFinal != true)
-						world.getCell(i, j).reward_ = -0.1;
-				}
+				my_agent.reset(world);
 			}
 		}
 		else
@@ -208,9 +213,9 @@ int main()
 
 	return 0;
 }
+*/
 
 
-/*
 //step 2
 int main()
 {
@@ -228,18 +233,11 @@ int main()
 
 
 	//Set Final Reward
-	world.getCell(5, 3).reward_ = 1.0;
-	world.getCell(5, 0).reward_ = -1.0;
-	world.getCell(1, 1).reward_ = -1.0;
-	world.getCell(2, 1).reward_ = -1.0;
-	world.getCell(3, 1).reward_ = -1.0;
-
-	world.getCell(5, 3).isFinal = true;
-	world.getCell(5, 0).isFinal = true;
-	world.getCell(1, 1).isFinal = true;
-	world.getCell(2, 1).isFinal = true;
-	world.getCell(3, 1).isFinal = true;
-	
+	world.getCell(5, 3).setFinal(1.0);
+	world.getCell(5, 0).setFinal(-1.0);
+	world.getCell(1, 1).setFinal(-1.0);
+	world.getCell(2, 1).setFinal(-1.0);
+	world.getCell(3, 1).setFinal(-1.0);
 
 	Agent my_agent;
 
@@ -284,13 +282,7 @@ int main()
 			// reset if agent is in final cells
 			if (world.getCell(i, j).isFinal == true)
 			{
-				my_agent.reset();
-				for (int j = 0; j < world_res_j; j++)
-				for (int i = 0; i < world_res_i; i++)
-				{
-					if(world.getCell(i, j).isFinal != true)
-						world.getCell(i, j).reward_ = -0.1;
-				}
+				my_agent.reset(world);
 			}
 		}
 		else
@@ -308,4 +300,3 @@ int main()
 
 	return 0;
 }
-*/
